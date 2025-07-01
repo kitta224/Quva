@@ -67,18 +67,51 @@ function renderTabs() {
 function renderWebviews() {
     webviewContainer.innerHTML = '';
     tabs.forEach(tab => {
+        const wrapper = document.createElement('div');
+        wrapper.style.position = 'absolute';
+        wrapper.style.top = 0;
+        wrapper.style.left = 0;
+        wrapper.style.right = 0;
+        wrapper.style.bottom = 0;
+        wrapper.style.width = '100%';
+        wrapper.style.height = '100%';
+        wrapper.style.display = tab.id === activeTabId ? 'block' : 'none';
+
         const iframe = document.createElement('iframe');
-        iframe.className = 'webview' + (tab.id === activeTabId ? ' active' : '');
+        iframe.className = 'webview';
         iframe.src = tab.url;
         iframe.setAttribute('sandbox', 'allow-scripts allow-forms allow-same-origin');
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        iframe.style.border = 'none';
+        let errorShown = false;
         iframe.onload = () => {
             if (tab.id === activeTabId) {
                 urlInput.value = tab.url;
             }
         };
-        webviewContainer.appendChild(iframe);
+        iframe.onerror = () => {
+            if (!errorShown) {
+                showIframeError(wrapper, tab.url);
+                errorShown = true;
+            }
+        };
+        // タイムアウトでエラー表示（X-Frame-Optionsはonerror発火しないため）
+        setTimeout(() => {
+            if (!iframe.contentWindow || !iframe.contentDocument || iframe.contentDocument.body.innerHTML === '') {
+                showIframeError(wrapper, tab.url);
+            }
+        }, 1500);
+        wrapper.appendChild(iframe);
+        webviewContainer.appendChild(wrapper);
     });
     updateToolbar();
+}
+
+function showIframeError(wrapper, url) {
+    wrapper.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#c00;font-size:1.2em;background:#fff;">
+        このサイト（${url}）はセキュリティ上の理由で表示できません。<br>接続が拒否されました。
+    </div>`;
 }
 
 function updateToolbar() {
