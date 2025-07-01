@@ -1,0 +1,94 @@
+body {
+    background: #f4f4f4;
+    font-family: 'Segoe UI', 'Meiryo', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.browser-container {
+    width: 90vw;
+    max-width: 900px;
+    margin: 30px auto;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.13);
+    overflow: hidden;
+}
+
+.tab-bar {
+    display: flex;
+    background: #e0e0e0;
+    border-bottom: 1px solid #ccc;
+    min-height: 40px;
+    align-items: center;
+    padding: 0 8px;
+    overflow-x: auto;
+}
+.tab {
+    padding: 8px 18px;
+    margin: 4px 4px 4px 0;
+    background: #fff;
+    border-radius: 6px 6px 0 0;
+    border: 1px solid #ccc;
+    border-bottom: none;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.tab.active {
+    background: #2196f3;
+    color: #fff;
+    font-weight: bold;
+}
+.tab .close {
+    margin-left: 8px;
+    color: #888;
+    cursor: pointer;
+}
+.toolbar {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background: #fafafa;
+    border-bottom: 1px solid #eee;
+}
+.toolbar button {
+    margin-right: 8px;
+    padding: 6px 12px;
+    border: none;
+    background: #2196f3;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.2s;
+}
+.toolbar button:disabled {
+    background: #b0b0b0;
+    cursor: not-allowed;
+}
+#urlInput {
+    flex: 1;
+    padding: 7px 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 8px;
+}
+.webview-container {
+    height: 70vh;
+    background: #fff;
+    overflow: auto;
+    position: relative;
+}
+.webview {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: #fff;
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    display: none;
+}
+.webview.active {
+    display: block;
+}
