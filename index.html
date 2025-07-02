@@ -3,21 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>シンプルWebブラウザ</title>
+    <title>YouTube ミュージックプレイヤー</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="browser-container">
-        <div class="tab-bar" id="tabBar"></div>
-        <div class="toolbar">
-            <button id="backBtn">←</button>
-            <button id="forwardBtn">→</button>
-            <input type="text" id="urlInput" placeholder="URLを入力...">
-            <button id="goBtn">移動</button>
-            <button id="newTabBtn">＋</button>
-        </div>
-        <div class="webview-container" id="webviewContainer"></div>
+    <div class="container">
+        <h1>YouTube ミュージックプレイヤー</h1>
+        <input type="text" id="youtube-url" placeholder="YouTubeのURLを貼り付けてください">
+        <button id="play-btn">再生</button>
+        <div id="player"></div>
     </div>
+    <script src="https://www.youtube.com/iframe_api"></script>
     <script src="system.js"></script>
 </body>
 </html>
