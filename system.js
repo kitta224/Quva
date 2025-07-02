@@ -47,21 +47,10 @@ document.getElementById('search-btn').addEventListener('click', async function()
     if (data.items && data.items.length > 0) {
         data.items.forEach(item => {
             const btn = document.createElement('button');
-            btn.textContent = '▶ 再生';
             btn.className = 'queue-btn';
+            btn.title = '＋キュー';
+            btn.innerHTML = '<img src="img/dark/queue_play_next.svg" alt="add" width="18">';
             btn.onclick = () => {
-                addToQueue({
-                    title: item.snippet.title,
-                    videoId: item.id.videoId
-                });
-                if (queue.length === 1) {
-                    playQueueIndex(0);
-                }
-            };
-            const addBtn = document.createElement('button');
-            addBtn.textContent = '＋キュー';
-            addBtn.className = 'add-queue-btn';
-            addBtn.onclick = () => {
                 addToQueue({
                     title: item.snippet.title,
                     videoId: item.id.videoId
@@ -71,7 +60,6 @@ document.getElementById('search-btn').addEventListener('click', async function()
             titleSpan.textContent = item.snippet.title;
             resultsDiv.appendChild(titleSpan);
             resultsDiv.appendChild(btn);
-            resultsDiv.appendChild(addBtn);
             resultsDiv.appendChild(document.createElement('br'));
         });
     } else {
@@ -93,26 +81,11 @@ function renderQueue() {
         title.className = 'queue-title';
         title.textContent = (idx === nowPlayingIndex ? '▶ ' : '') + item.title;
         li.appendChild(title);
-        // 上下ボタン
-        const upBtn = document.createElement('button');
-        upBtn.className = 'queue-btn';
-        upBtn.disabled = idx === 0;
-        upBtn.title = '上へ';
-        upBtn.innerHTML = '<img src="img/dark/queue_play_next.svg" alt="up" width="18">';
-        upBtn.onclick = () => moveQueue(idx, idx - 1);
-        li.appendChild(upBtn);
-        const downBtn = document.createElement('button');
-        downBtn.className = 'queue-btn';
-        downBtn.disabled = idx === queue.length - 1;
-        downBtn.title = '下へ';
-        downBtn.innerHTML = '<img src="img/dark/skip_next_24dp.svg" alt="down" width="18">';
-        downBtn.onclick = () => moveQueue(idx, idx + 1);
-        li.appendChild(downBtn);
         // 再生ボタン
         const playBtn = document.createElement('button');
         playBtn.className = 'queue-btn';
         playBtn.title = '再生';
-        playBtn.innerHTML = '<img src="img/dark/queue_music.svg" alt="play" width="18">';
+        playBtn.textContent = '▶';
         playBtn.onclick = () => playQueueIndex(idx);
         li.appendChild(playBtn);
         // 削除ボタン
@@ -122,6 +95,21 @@ function renderQueue() {
         delBtn.innerHTML = '<img src="img/dark/remove_from_queue.svg" alt="del" width="18">';
         delBtn.onclick = () => removeFromQueue(idx);
         li.appendChild(delBtn);
+        // 上下ボタン
+        const upBtn = document.createElement('button');
+        upBtn.className = 'queue-btn';
+        upBtn.disabled = idx === 0;
+        upBtn.title = '上へ';
+        upBtn.innerHTML = '↑';
+        upBtn.onclick = () => moveQueue(idx, idx - 1);
+        li.appendChild(upBtn);
+        const downBtn = document.createElement('button');
+        downBtn.className = 'queue-btn';
+        downBtn.disabled = idx === queue.length - 1;
+        downBtn.title = '下へ';
+        downBtn.innerHTML = '↓';
+        downBtn.onclick = () => moveQueue(idx, idx + 1);
+        li.appendChild(downBtn);
         list.appendChild(li);
     });
 }
