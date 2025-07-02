@@ -7,25 +7,28 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>YouTube ミュージックプレイヤー</h1>
-        <input type="text" id="api-key" placeholder="YouTube APIキーを入力">
-        <br>
-        <input type="text" id="music-query" placeholder="曲名またはアーティスト名を入力">
-        <button id="search-btn">検索</button>
-        <br>
-        <input type="text" id="youtube-url" placeholder="YouTubeのURLを貼り付けてください">
-        <button id="play-btn">再生</button>
-        <div style="display: flex; gap: 16px; align-items: flex-start;">
-            <div style="flex: 1;">
-                <div id="search-results"></div>
-            </div>
-            <div style="flex: 1;">
-                <h2 style="font-size:1.1em; margin-bottom:8px;">再生キュー</h2>
-                <ul id="queue-list"></ul>
-            </div>
+    <div class="split-container">
+        <div class="split-panel left-panel">
+            <h2>検索</h2>
+            <input type="text" id="api-key" placeholder="YouTube APIキーを入力">
+            <br>
+            <input type="text" id="music-query" placeholder="曲名またはアーティスト名を入力">
+            <button id="search-btn">検索</button>
+            <br>
+            <input type="text" id="youtube-url" placeholder="YouTubeのURLを貼り付けてください">
+            <button id="play-btn">再生</button>
+            <div id="search-results"></div>
         </div>
-        <div id="player"></div>
+        <div class="split-bar" id="bar-left"></div>
+        <div class="split-panel center-panel">
+            <h1>YouTube ミュージックプレイヤー</h1>
+            <div id="player"></div>
+        </div>
+        <div class="split-bar" id="bar-right"></div>
+        <div class="split-panel right-panel">
+            <h2>再生キュー</h2>
+            <ul id="queue-list"></ul>
+        </div>
     </div>
     <script src="https://www.youtube.com/iframe_api"></script>
     <script src="system.js"></script>

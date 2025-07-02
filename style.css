@@ -1,3 +1,52 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: #181818;
+    color: #fff;
+    font-family: 'Segoe UI', sans-serif;
+}
+.split-container {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+}
+.split-panel {
+    height: 100%;
+    overflow-y: auto;
+    padding: 24px 16px;
+    box-sizing: border-box;
+}
+.left-panel {
+    background: #232323;
+    min-width: 260px;
+    max-width: 400px;
+    width: 22%;
+    border-right: 1px solid #333;
+}
+.center-panel {
+    background: #181818;
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 320px;
+}
+.right-panel {
+    background: #232323;
+    min-width: 260px;
+    max-width: 400px;
+    width: 22%;
+    border-left: 1px solid #333;
+}
+.split-bar {
+    width: 6px;
+    background: #444;
+    cursor: col-resize;
+    z-index: 10;
+}
 body {
     background: #181818;
     color: #fff;

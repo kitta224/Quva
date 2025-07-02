@@ -161,3 +161,39 @@ function playYouTubeVideo(videoId) {
     }
 }
 // SoundCloudやSpotifyの埋め込みはAPIキーや認証が必要なため、まずはYouTubeのみ実装。
+
+// スプリットバーによるリサイズ機能
+function makeResizableBar(barId, leftPanel, rightPanel, isLeftBar) {
+    const bar = document.getElementById(barId);
+    let isDragging = false;
+    bar.addEventListener('mousedown', function(e) {
+        isDragging = true;
+        document.body.style.cursor = 'col-resize';
+    });
+    document.addEventListener('mousemove', function(e) {
+        if (!isDragging) return;
+        const container = document.querySelector('.split-container');
+        const rect = container.getBoundingClientRect();
+        let x = e.clientX - rect.left;
+        let min = 180, max = 600;
+        if (isLeftBar) {
+            if (x < min) x = min;
+            if (x > max) x = max;
+            leftPanel.style.width = x + 'px';
+        } else {
+            let total = rect.width;
+            let rightWidth = total - x;
+            if (rightWidth < min) rightWidth = min;
+            if (rightWidth > max) rightWidth = max;
+            rightPanel.style.width = rightWidth + 'px';
+        }
+    });
+    document.addEventListener('mouseup', function() {
+        isDragging = false;
+        document.body.style.cursor = '';
+    });
+}
+window.addEventListener('DOMContentLoaded', function() {
+    makeResizableBar('bar-left', document.querySelector('.left-panel'), null, true);
+    makeResizableBar('bar-right', null, document.querySelector('.right-panel'), false);
+});
