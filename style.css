@@ -40,3 +40,43 @@ button {
     margin-top: 18px;
     min-height: 200px;
 }
+#music-query {
+    width: 80%;
+    padding: 10px;
+    border-radius: 6px;
+    border: none;
+    margin-bottom: 12px;
+    font-size: 1em;
+}
+#search-btn {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 6px;
+    background: #1db954;
+    color: #fff;
+    font-size: 1em;
+    cursor: pointer;
+    margin-bottom: 18px;
+    margin-left: 4px;
+}
+#search-results {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+#search-results button {
+    margin: 4px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: none;
+    background: #333;
+    color: #fff;
+    cursor: pointer;
+}
+#api-key {
+    width: 80%;
+    padding: 10px;
+    border-radius: 6px;
+    border: none;
+    margin-bottom: 12px;
+    font-size: 1em;
+}

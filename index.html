@@ -9,8 +9,14 @@
 <body>
     <div class="container">
         <h1>YouTube ミュージックプレイヤー</h1>
+        <input type="text" id="api-key" placeholder="YouTube APIキーを入力">
+        <br>
+        <input type="text" id="music-query" placeholder="曲名またはアーティスト名を入力">
+        <button id="search-btn">検索</button>
+        <br>
         <input type="text" id="youtube-url" placeholder="YouTubeのURLを貼り付けてください">
         <button id="play-btn">再生</button>
+        <div id="search-results"></div>
         <div id="player"></div>
     </div>
     <script src="https://www.youtube.com/iframe_api"></script>
