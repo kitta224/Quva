@@ -95,27 +95,31 @@ function renderQueue() {
         li.appendChild(title);
         // 上下ボタン
         const upBtn = document.createElement('button');
-        upBtn.textContent = '↑';
         upBtn.className = 'queue-btn';
         upBtn.disabled = idx === 0;
+        upBtn.title = '上へ';
+        upBtn.innerHTML = '<img src="img/dark/queue_play_next.svg" alt="up" width="18">';
         upBtn.onclick = () => moveQueue(idx, idx - 1);
         li.appendChild(upBtn);
         const downBtn = document.createElement('button');
-        downBtn.textContent = '↓';
         downBtn.className = 'queue-btn';
         downBtn.disabled = idx === queue.length - 1;
+        downBtn.title = '下へ';
+        downBtn.innerHTML = '<img src="img/dark/skip_next_24dp.svg" alt="down" width="18">';
         downBtn.onclick = () => moveQueue(idx, idx + 1);
         li.appendChild(downBtn);
         // 再生ボタン
         const playBtn = document.createElement('button');
-        playBtn.textContent = '再生';
         playBtn.className = 'queue-btn';
+        playBtn.title = '再生';
+        playBtn.innerHTML = '<img src="img/dark/queue_music.svg" alt="play" width="18">';
         playBtn.onclick = () => playQueueIndex(idx);
         li.appendChild(playBtn);
         // 削除ボタン
         const delBtn = document.createElement('button');
-        delBtn.textContent = '削除';
         delBtn.className = 'queue-btn';
+        delBtn.title = '削除';
+        delBtn.innerHTML = '<img src="img/dark/remove_from_queue.svg" alt="del" width="18">';
         delBtn.onclick = () => removeFromQueue(idx);
         li.appendChild(delBtn);
         list.appendChild(li);
@@ -149,15 +153,32 @@ function playYouTubeVideo(videoId) {
         player.loadVideoById(videoId);
     } else {
         player = new YT.Player('player', {
-            height: '200',
+            height: '240',
             width: '100%',
             videoId: videoId,
             playerVars: {
                 'autoplay': 1,
                 'controls': 1,
                 'rel': 0
+            },
+            events: {
+                'onStateChange': onPlayerStateChange
             }
         });
+    }
+}
+
+function onPlayerStateChange(event) {
+    // 再生終了時
+    if (event.data === YT.PlayerState.ENDED) {
+        if (queue.length > 0) {
+            queue.splice(nowPlayingIndex, 1);
+            if (nowPlayingIndex >= queue.length) nowPlayingIndex = queue.length - 1;
+            renderQueue();
+            if (queue.length > 0 && nowPlayingIndex >= 0) {
+                playQueueIndex(nowPlayingIndex);
+            }
+        }
     }
 }
 // SoundCloudやSpotifyの埋め込みはAPIキーや認証が必要なため、まずはYouTubeのみ実装。
