@@ -1,4 +1,6 @@
 let player;
+let queue = [];
+let nowPlayingIndex = 0;
 
 function extractVideoId(url) {
     const regExp = /(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?|shorts)\/|.*[?&]v=)|youtu\.be\/)([\w-]{11})/;
@@ -17,7 +19,13 @@ document.getElementById('play-btn').addEventListener('click', function() {
         alert('有効なYouTube動画URLを入力してください');
         return;
     }
-    playYouTubeVideo(videoId);
+    addToQueue({
+        title: url,
+        videoId: videoId
+    });
+    if (queue.length === 1) {
+        playQueueIndex(0);
+    }
 });
 
 document.getElementById('search-btn').addEventListener('click', async function() {
@@ -39,14 +47,102 @@ document.getElementById('search-btn').addEventListener('click', async function()
     if (data.items && data.items.length > 0) {
         data.items.forEach(item => {
             const btn = document.createElement('button');
-            btn.textContent = item.snippet.title;
-            btn.onclick = () => playYouTubeVideo(item.id.videoId);
+            btn.textContent = '▶ 再生';
+            btn.className = 'queue-btn';
+            btn.onclick = () => {
+                addToQueue({
+                    title: item.snippet.title,
+                    videoId: item.id.videoId
+                });
+                if (queue.length === 1) {
+                    playQueueIndex(0);
+                }
+            };
+            const addBtn = document.createElement('button');
+            addBtn.textContent = '＋キュー';
+            addBtn.className = 'add-queue-btn';
+            addBtn.onclick = () => {
+                addToQueue({
+                    title: item.snippet.title,
+                    videoId: item.id.videoId
+                });
+            };
+            const titleSpan = document.createElement('span');
+            titleSpan.textContent = item.snippet.title;
+            resultsDiv.appendChild(titleSpan);
             resultsDiv.appendChild(btn);
+            resultsDiv.appendChild(addBtn);
+            resultsDiv.appendChild(document.createElement('br'));
         });
     } else {
         resultsDiv.textContent = '見つかりませんでした。';
     }
 });
+
+function addToQueue(item) {
+    queue.push(item);
+    renderQueue();
+}
+
+function renderQueue() {
+    const list = document.getElementById('queue-list');
+    list.innerHTML = '';
+    queue.forEach((item, idx) => {
+        const li = document.createElement('li');
+        const title = document.createElement('span');
+        title.className = 'queue-title';
+        title.textContent = (idx === nowPlayingIndex ? '▶ ' : '') + item.title;
+        li.appendChild(title);
+        // 上下ボタン
+        const upBtn = document.createElement('button');
+        upBtn.textContent = '↑';
+        upBtn.className = 'queue-btn';
+        upBtn.disabled = idx === 0;
+        upBtn.onclick = () => moveQueue(idx, idx - 1);
+        li.appendChild(upBtn);
+        const downBtn = document.createElement('button');
+        downBtn.textContent = '↓';
+        downBtn.className = 'queue-btn';
+        downBtn.disabled = idx === queue.length - 1;
+        downBtn.onclick = () => moveQueue(idx, idx + 1);
+        li.appendChild(downBtn);
+        // 再生ボタン
+        const playBtn = document.createElement('button');
+        playBtn.textContent = '再生';
+        playBtn.className = 'queue-btn';
+        playBtn.onclick = () => playQueueIndex(idx);
+        li.appendChild(playBtn);
+        // 削除ボタン
+        const delBtn = document.createElement('button');
+        delBtn.textContent = '削除';
+        delBtn.className = 'queue-btn';
+        delBtn.onclick = () => removeFromQueue(idx);
+        li.appendChild(delBtn);
+        list.appendChild(li);
+    });
+}
+
+function moveQueue(from, to) {
+    if (to < 0 || to >= queue.length) return;
+    const [item] = queue.splice(from, 1);
+    queue.splice(to, 0, item);
+    if (nowPlayingIndex === from) nowPlayingIndex = to;
+    else if (nowPlayingIndex === to) nowPlayingIndex = from;
+    renderQueue();
+}
+
+function removeFromQueue(idx) {
+    queue.splice(idx, 1);
+    if (nowPlayingIndex >= queue.length) nowPlayingIndex = queue.length - 1;
+    renderQueue();
+}
+
+function playQueueIndex(idx) {
+    if (idx < 0 || idx >= queue.length) return;
+    nowPlayingIndex = idx;
+    playYouTubeVideo(queue[idx].videoId);
+    renderQueue();
+}
 
 function playYouTubeVideo(videoId) {
     if (player) {

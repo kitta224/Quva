@@ -16,7 +16,15 @@
         <br>
         <input type="text" id="youtube-url" placeholder="YouTubeのURLを貼り付けてください">
         <button id="play-btn">再生</button>
-        <div id="search-results"></div>
+        <div style="display: flex; gap: 16px; align-items: flex-start;">
+            <div style="flex: 1;">
+                <div id="search-results"></div>
+            </div>
+            <div style="flex: 1;">
+                <h2 style="font-size:1.1em; margin-bottom:8px;">再生キュー</h2>
+                <ul id="queue-list"></ul>
+            </div>
+        </div>
         <div id="player"></div>
     </div>
     <script src="https://www.youtube.com/iframe_api"></script>
