@@ -205,4 +205,21 @@ function makeResizableBar(barId, leftPanel, rightPanel, isLeftBar) {
 window.addEventListener('DOMContentLoaded', function() {
     makeResizableBar('bar-left', document.querySelector('.left-panel'), null, true);
     makeResizableBar('bar-right', null, document.querySelector('.right-panel'), false);
+    const shuffleBtn = document.getElementById('shuffle-btn');
+    if (shuffleBtn) {
+        shuffleBtn.addEventListener('click', function() {
+            shuffleQueue();
+        });
+    }
 });
+
+function shuffleQueue() {
+    if (queue.length <= 1) return;
+    // Fisher-Yatesアルゴリズムでシャッフル
+    for (let i = queue.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [queue[i], queue[j]] = [queue[j], queue[i]];
+    }
+    nowPlayingIndex = 0;
+    renderQueue();
+}
