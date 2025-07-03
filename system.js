@@ -30,16 +30,16 @@ document.getElementById('play-btn').addEventListener('click', function() {
 
 document.getElementById('search-btn').addEventListener('click', async function() {
     const query = document.getElementById('music-query').value.trim();
-    const YT_API_KEY = document.getElementById('api-key').value.trim();
+    const apiKey = localStorage.getItem('yt_api_key') || '';
     if (!query) {
         alert('曲名やアーティスト名を入力してください');
         return;
     }
-    if (!YT_API_KEY) {
-        alert('YouTube APIキーを入力してください');
+    if (!apiKey) {
+        alert('YouTube APIキーを設定してください');
         return;
     }
-    const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=5&q=${encodeURIComponent(query)}&key=${YT_API_KEY}`;
+    const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=5&q=${encodeURIComponent(query)}&key=${apiKey}`;
     const res = await fetch(url);
     const data = await res.json();
     const resultsDiv = document.getElementById('search-results');
@@ -127,6 +127,10 @@ function removeFromQueue(idx) {
     queue.splice(idx, 1);
     if (nowPlayingIndex >= queue.length) nowPlayingIndex = queue.length - 1;
     renderQueue();
+    // 再生中の曲が削除された場合はプレイヤーも停止
+    if (idx === nowPlayingIndex + 1 || (queue.length === 0 && idx === 0)) {
+        if (player) player.stopVideo();
+    }
 }
 
 function playQueueIndex(idx) {
@@ -211,6 +215,31 @@ window.addEventListener('DOMContentLoaded', function() {
             shuffleQueue();
         });
     }
+    // APIキー設定モーダルの制御
+    const apiKeyBtn = document.getElementById('api-key-setting-btn');
+    const apiKeyModal = document.getElementById('api-key-modal');
+    const closeApiKeyModal = document.getElementById('close-api-key-modal');
+    const saveApiKeyBtn = document.getElementById('save-api-key-btn');
+    const apiKeyInput = document.getElementById('api-key');
+    // ローカルストレージからAPIキーを取得
+    if (localStorage.getItem('yt_api_key')) {
+        apiKeyInput.value = localStorage.getItem('yt_api_key');
+    }
+    apiKeyBtn.addEventListener('click', function() {
+        apiKeyModal.style.display = 'flex';
+        apiKeyInput.value = localStorage.getItem('yt_api_key') || '';
+    });
+    closeApiKeyModal.addEventListener('click', function() {
+        apiKeyModal.style.display = 'none';
+    });
+    saveApiKeyBtn.addEventListener('click', function() {
+        localStorage.setItem('yt_api_key', apiKeyInput.value.trim());
+        apiKeyModal.style.display = 'none';
+    });
+    // モーダル外クリックで閉じる
+    apiKeyModal.addEventListener('click', function(e) {
+        if (e.target === apiKeyModal) apiKeyModal.style.display = 'none';
+    });
 });
 
 function shuffleQueue() {

@@ -10,13 +10,29 @@
     <div class="split-container">
         <div class="split-panel left-panel">
             <h2>検索</h2>
-            <input type="text" id="api-key" placeholder="YouTube APIキーを入力">
-            <br>
-            <input type="text" id="music-query" placeholder="曲名またはアーティスト名を入力">
-            <button id="search-btn">検索</button>
-            <br>
-            <input type="text" id="youtube-url" placeholder="YouTubeのURLを貼り付けてください">
-            <button id="play-btn">再生</button>
+            <button id="api-key-setting-btn" class="queue-btn" style="margin-bottom:12px; display: flex; align-items: center; gap: 6px;">
+                <img src="img/dark/settings_24dp.svg" alt="settings" width="22" style="vertical-align: middle;">
+                <span>APIキー設定</span>
+            </button>
+            <div id="api-key-modal" class="modal" style="display:none;">
+                <div class="modal-content">
+                    <span id="close-api-key-modal" class="close">&times;</span>
+                    <h3>YouTube APIキー設定</h3>
+                    <input type="text" id="api-key" placeholder="YouTube APIキーを入力" style="width:90%;margin-bottom:12px;">
+                    <br>
+                    <button id="save-api-key-btn" class="queue-btn">保存</button>
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                <input type="text" id="music-query" placeholder="曲名またはアーティスト名を入力" style="flex:1;">
+                <button id="search-btn" class="queue-btn" title="検索" style="padding:6px 10px;">
+                    <img src="img/dark/video_search_24dp.svg" alt="search" width="20">
+                </button>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                <input type="text" id="youtube-url" placeholder="YouTubeのURLを貼り付けてください" style="flex:1;">
+                <button id="play-btn" class="queue-btn" title="再生" style="padding:6px 14px;">再生</button>
+            </div>
             <div id="search-results"></div>
         </div>
         <div class="split-bar" id="bar-left"></div>
