@@ -19,6 +19,9 @@
                     <span id="close-api-key-modal" class="close">&times;</span>
                     <h3>YouTube APIキー設定</h3>
                     <input type="text" id="api-key" placeholder="YouTube APIキーを入力" style="width:90%;margin-bottom:12px;">
+                    <h3 style="margin-top:18px;">Spotify API設定</h3>
+                    <input type="text" id="spotify-client-id" placeholder="Spotify Client ID" style="width:90%;margin-bottom:8px;">
+                    <input type="text" id="spotify-client-secret" placeholder="Spotify Client Secret" style="width:90%;margin-bottom:12px;">
                     <br>
                     <button id="save-api-key-btn" class="queue-btn">保存</button>
                 </div>
@@ -34,6 +37,10 @@
                 <button id="play-btn" class="queue-btn" title="再生" style="padding:6px 14px;">再生</button>
             </div>
             <div id="search-results"></div>
+            <button id="spotify-login-btn" class="queue-btn" style="margin-bottom:12px; display: flex; align-items: center; gap: 6px; background: #1db954;">
+                <img src="https://developer.spotify.com/assets/branding-guidelines/icon3@2x.png" alt="spotify" width="22" style="vertical-align: middle;">
+                <span>Spotifyでログイン</span>
+            </button>
         </div>
         <div class="split-bar" id="bar-left"></div>
         <div class="split-panel center-panel">

@@ -215,25 +215,62 @@ window.addEventListener('DOMContentLoaded', function() {
             shuffleQueue();
         });
     }
+    // Spotifyログインボタン
+    const spotifyLoginBtn = document.getElementById('spotify-login-btn');
+    if (spotifyLoginBtn) {
+        spotifyLoginBtn.addEventListener('click', function() {
+            const clientId = localStorage.getItem('spotify_client_id') || '';
+            const redirectUri = window.location.origin + window.location.pathname;
+            const scopes = [
+                'user-read-private',
+                'user-read-email',
+                'streaming',
+                'user-read-playback-state',
+                'user-modify-playback-state',
+                'user-library-read',
+                'user-library-modify'
+            ];
+            const authUrl =
+                'https://accounts.spotify.com/authorize' +
+                '?response_type=token' +
+                '&client_id=' + encodeURIComponent(clientId) +
+                '&scope=' + encodeURIComponent(scopes.join(' ')) +
+                '&redirect_uri=' + encodeURIComponent(redirectUri) +
+                '&show_dialog=true';
+            window.location.href = authUrl;
+        });
+    }
     // APIキー設定モーダルの制御
     const apiKeyBtn = document.getElementById('api-key-setting-btn');
     const apiKeyModal = document.getElementById('api-key-modal');
     const closeApiKeyModal = document.getElementById('close-api-key-modal');
     const saveApiKeyBtn = document.getElementById('save-api-key-btn');
     const apiKeyInput = document.getElementById('api-key');
-    // ローカルストレージからAPIキーを取得
+    const spotifyClientIdInput = document.getElementById('spotify-client-id');
+    const spotifyClientSecretInput = document.getElementById('spotify-client-secret');
+    // ローカルストレージからAPIキー・Spotify情報を取得
     if (localStorage.getItem('yt_api_key')) {
         apiKeyInput.value = localStorage.getItem('yt_api_key');
+    }
+    if (localStorage.getItem('spotify_client_id')) {
+        spotifyClientIdInput.value = localStorage.getItem('spotify_client_id');
+    }
+    if (localStorage.getItem('spotify_client_secret')) {
+        spotifyClientSecretInput.value = localStorage.getItem('spotify_client_secret');
     }
     apiKeyBtn.addEventListener('click', function() {
         apiKeyModal.style.display = 'flex';
         apiKeyInput.value = localStorage.getItem('yt_api_key') || '';
+        spotifyClientIdInput.value = localStorage.getItem('spotify_client_id') || '';
+        spotifyClientSecretInput.value = localStorage.getItem('spotify_client_secret') || '';
     });
     closeApiKeyModal.addEventListener('click', function() {
         apiKeyModal.style.display = 'none';
     });
     saveApiKeyBtn.addEventListener('click', function() {
         localStorage.setItem('yt_api_key', apiKeyInput.value.trim());
+        localStorage.setItem('spotify_client_id', spotifyClientIdInput.value.trim());
+        localStorage.setItem('spotify_client_secret', spotifyClientSecretInput.value.trim());
         apiKeyModal.style.display = 'none';
     });
     // モーダル外クリックで閉じる
@@ -241,6 +278,19 @@ window.addEventListener('DOMContentLoaded', function() {
         if (e.target === apiKeyModal) apiKeyModal.style.display = 'none';
     });
 });
+
+// Spotifyアクセストークン取得（URLハッシュから）
+function getSpotifyAccessToken() {
+    const hash = window.location.hash.substring(1);
+    const params = new URLSearchParams(hash);
+    const token = params.get('access_token');
+    if (token) {
+        localStorage.setItem('spotify_access_token', token);
+        // ハッシュを消してURLをきれいに
+        window.location.hash = '';
+    }
+    return token || localStorage.getItem('spotify_access_token') || '';
+}
 
 function shuffleQueue() {
     if (queue.length <= 1) return;
